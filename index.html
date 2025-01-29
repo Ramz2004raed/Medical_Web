@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+    <style>
+        <style >
+        /* General Reset */
+        body, h1, h2, h3, p, ul, li, a, input, select, textarea, button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            direction: rtl;
+        }
+
+        /* Header Styling */
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+            .feature:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .feature h3 {
+                color: #4CAF50;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+            }
+
+            .feature p {
+                color: #555;
+            }
+
+        /* Form Styling */
+        .form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+
+            .form label {
+                display: block;
+                margin: 1rem 0 0.5rem;
+                font-weight: bold;
+            }
+
+            .form input, .form select, .form textarea {
+                width: 100%;
+                padding: 0.8rem;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 1rem;
+            }
+
+            .form textarea {
+                height: 120px;
+            }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+
+            .submit-btn:hover {
+                background: #388E3C;
+            }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشخيصك الطبي الذكي</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">تشخيصك الذكي</h1>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h2>اختر الخدمة التي تحتاجها</h2>
+            <div class="features">
+                <a href="Medical-diagnosis.html" class="feature">
+                    <h3>تشخيص الأعراض</h3>
+                    <p>تحليل الأعراض وتقديم التشخيص الأولي</p>
+                </a>
+                <a href="image_upload.html" class="feature">
+                    <h3>تحليل الصور الطبية</h3>
+                    <p>الكشف عن التشوهات في الصور الطبية</p>
+                </a>
+                <a href="medications.html" class="feature">
+                    <h3>إرشادات دوائية</h3>
+                    <p>معلومات تفصيلية عن الأدوية والجرعات</p>
+                </a>
+                <a href="labs.html" class="feature">
+                    <h3>تحليل الفحوصات المخبرية</h3>
+                    <p>إدخال بيانات التحاليل المخبرية للحصول على تحليل دقيق</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 تشخيصك الطبي الذكي. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+</body>
+</html>

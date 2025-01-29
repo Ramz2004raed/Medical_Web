@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>«· ‘ŒÌ’ «·ÿ»Ì «·–ﬂÌ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">«· ‘ŒÌ’ «·ÿ»Ì «·–ﬂÌ</h2>
+        <form action="/analyze_symptoms" method="post" class="form">
+            <label for="age">«·⁄„—:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="gender">«·Ã‰”:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">–ﬂ—</option>
+                <option value="female">√‰ÀÏ</option>
+            </select>
+
+            <label for="symptoms">«·√⁄—«÷:</label>
+            <textarea id="symptoms" name="symptoms" placeholder="ﬁ„ »ﬂ «»… «·√⁄—«÷ «· Ì  ⁄«‰Ì „‰Â« »«· ›’Ì·" required></textarea>
+            
+            <label for="medical_history">«· «—ÌŒ «·ÿ»Ì:</label>
+            <textarea id="medical_history" name="medical_history" placeholder="«–ﬂ— √Ì √„—«÷ ”«»ﬁ… √Ê „“„‰… ≈‰ ÊÃœ "></textarea>
+            
+            <label for="medications">«·√œÊÌ… «·Õ«·Ì…:</label>
+            <textarea id="medications" name="medications" placeholder="«–ﬂ— «·√œÊÌ… «· Ì   ‰«Ê·Â« Õ«·Ì«"></textarea>
+            
+            <label for="allergies">«·Õ”«”Ì…:</label>
+            <textarea id="allergies" name="allergies" placeholder="«–ﬂ— √Ì √‰Ê«⁄ „‰ «·Õ”«”Ì… ·œÌﬂ ≈‰ ÊÃœ "></textarea>
+            
+            <button type="submit" class="submit-btn"> Õ·Ì· «·√⁄—«÷</button>
+        </form>
+    </div>
+</body>
+</html>

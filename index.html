@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 
     <style>
-        <style >
+        
         /* General Reset */
         body, h1, h2, h3, p, ul, li, a, input, select, textarea, button {
             margin: 0;
@@ -13,22 +13,21 @@
         }
 
         body {
-              background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover fixed;
-           
+            background: url('https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover fixed, rgba(0, 0, 0, 0.7);
+ 
             color: #333;
             direction: rtl;
         }
 
         /* Header Styling */
         .header {
-            background-color: #4CAF50;
+            background-color: rgba(76, 175, 80, 0.8); /* 0.8 يعني الشفافية بنسبة 80% */
             color: white;
             text-align: center;
             padding: 1.5rem 0;
             font-size: 1.8rem;
             font-weight: bold;
         }
-
         /* Main Content */
         .main-content {
             padding: 3rem 0;
@@ -124,12 +123,15 @@
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 1.5rem 0;
-            margin-top: 3rem;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0; /* يثبت الشريط في أسفل الشاشة */
+            width: 100%; /* يجعل الشريط يمتد عبر عرض الشاشة بالكامل */
+            margin-top: 0; /* إزالة المسافة العليا */
         }
     </style>
 
-    </style>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تشخيصك الطبي الذكي</title>

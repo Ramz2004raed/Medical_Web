@@ -161,9 +161,9 @@
                         // إضافة قائمة بالأمراض
                         let diseases = data.result.map(item => {
                             return `<div class="disease">
-                                                <span>${item.disease}</span>
-                                                <span class="probability">${item.probability}</span>
-                                            </div>`;
+                                        <span>${item.disease}</span>
+                                        <span class="probability">${item.probability}</span>
+                                    </div>`;
                         }).join('');
 
                         resultText.innerHTML = diseases;

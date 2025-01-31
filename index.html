@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشخيصك الطبي الذكي</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        
-        /* General Reset */
         body, h1, h2, h3, p, ul, li, a, input, select, textarea, button {
             margin: 0;
             padding: 0;
@@ -13,22 +14,20 @@
         }
 
         body {
-            background: url('https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover fixed, rgba(0, 0, 0, 0.7);
- 
+            background: url('https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover fixed;
             color: #333;
             direction: rtl;
         }
 
-        /* Header Styling */
         .header {
-            background-color: rgba(76, 175, 80, 0.8); /* 0.8 يعني الشفافية بنسبة 80% */
+            background-color: #4CAF50;
             color: white;
             text-align: center;
             padding: 1.5rem 0;
             font-size: 1.8rem;
             font-weight: bold;
         }
-        /* Main Content */
+
         .main-content {
             padding: 3rem 0;
             text-align: center;
@@ -53,7 +52,7 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s;
             text-decoration: none;
             color: inherit;
             display: block;
@@ -70,11 +69,6 @@
                 font-size: 1.5rem;
             }
 
-            .feature p {
-                color: #555;
-            }
-
-        /* Form Styling */
         .form {
             background: white;
             padding: 2rem;
@@ -98,10 +92,6 @@
                 font-size: 1rem;
             }
 
-            .form textarea {
-                height: 120px;
-            }
-
         .submit-btn {
             background: #4CAF50;
             color: white;
@@ -118,24 +108,14 @@
                 background: #388E3C;
             }
 
-        /* Footer Styling */
         .footer {
             background-color: #333;
             color: white;
             text-align: center;
             padding: 1rem 0;
-            position: fixed;
-            bottom: 0; /* يثبت الشريط في أسفل الشاشة */
-            width: 100%; /* يجعل الشريط يمتد عبر عرض الشاشة بالكامل */
-            margin-top: 0; /* إزالة المسافة العليا */
+            margin-top: 1rem;
         }
     </style>
-
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تشخيصك الطبي الذكي</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="header">
@@ -143,7 +123,6 @@
             <h1 class="logo">تشخيصك الذكي</h1>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
             <h2>اختر الخدمة التي تحتاجها</h2>
@@ -167,13 +146,11 @@
             </div>
         </div>
     </main>
-
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 تشخيصك الطبي الذكي. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
     <script src="script.js"></script>
-
 </body>
 </html>

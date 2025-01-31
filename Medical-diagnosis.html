@@ -1,176 +1,118 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-   <style>
-       * {
-           margin: 0;
-           padding: 0;
-           box-sizing: border-box;
-           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-       }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-       body {
-           background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.pexels.com/photos/7578803/pexels-photo-7578803.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover fixed;
-           min-height: 100vh;
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           padding: 20px;
-           color: #2d3748;
-       }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef') center/cover fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #2d3748;
+        }
 
-       .container {
-           background: rgba(255, 255, 255, 0.95);
-           width: 100%;
-           max-width: 700px;
-           padding: 2.5rem;
-           border-radius: 15px;
-           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-           backdrop-filter: blur(10px);
-           border: 1px solid rgba(255, 255, 255, 0.3);
-       }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 700px;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
-       .title {
-           text-align: center;
-           margin-bottom: 2rem;
-           font-size: 2.2rem;
-           color: #22543d;
-           position: relative;
-           padding-bottom: 0.5rem;
-           background: linear-gradient(to right, #38a169, #2f855a);
-           -webkit-background-clip: text;
-           -webkit-text-fill-color: transparent;
-       }
+        .title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            color: #22543d;
+            background: linear-gradient(to right, #38a169, #2f855a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-           .title::after {
-               content: '';
-               position: absolute;
-               bottom: 0;
-               right: 50%;
-               transform: translateX(50%);
-               width: 100px;
-               height: 3px;
-               background: #38a169;
-               border-radius: 2px;
-           }
+        .form {
+            display: grid;
+            gap: 1.5rem;
+        }
 
-       .form {
-           display: grid;
-           gap: 1.5rem;
-       }
+        label {
+            font-weight: 600;
+            color: #2d3748;
+            display: block;
+            font-size: 0.95rem;
+        }
 
-       label {
-           font-weight: 600;
-           color: #2d3748;
-           margin-bottom: -0.5rem;
-           display: block;
-           font-size: 0.95rem;
-           position: relative;
-           padding-right: 25px;
-       }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
 
-           label::before {
-               content: "•";
-               color: #38a169;
-               position: absolute;
-               right: 0;
-               font-size: 1.4rem;
-               top: -3px;
-           }
+        .submit-btn {
+            background: linear-gradient(to right, #38a169, #2f855a);
+            color: white;
+            padding: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
 
-       input, select, textarea {
-           width: 100%;
-           padding: 0.9rem 1.2rem;
-           border: 2px solid #e2e8f0;
-           border-radius: 8px;
-           font-size: 1rem;
-           transition: all 0.3s ease;
-           background: #f8fafc;
-       }
+            .submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(56, 161, 105, 0.3);
+            }
 
-       textarea {
-           resize: vertical;
-           min-height: 100px;
-           line-height: 1.6;
-       }
+        #diagnosis_result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px solid #38a169;
+            background: linear-gradient(to right, #e6fffa, #c6f6d5);
+            color: #22543d;
+            font-size: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
 
-           input:focus, select:focus, textarea:focus {
-               outline: none;
-               border-color: #38a169;
-               box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2);
-               background: #ffffff;
-           }
+        .disease {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0fff4;
+            border: 1px solid #38a169;
+            border-radius: 8px;
+        }
 
-       .submit-btn {
-           background: linear-gradient(to right, #38a169, #2f855a);
-           color: white;
-           padding: 1.1rem;
-           border: none;
-           border-radius: 8px;
-           font-size: 1.1rem;
-           font-weight: 600;
-           cursor: pointer;
-           transition: all 0.3s ease;
-           margin-top: 1rem;
-           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-       }
-
-           .submit-btn:hover {
-               transform: translateY(-2px);
-               box-shadow: 0 5px 15px rgba(56, 161, 105, 0.3);
-           }
-
-       /* تصميم متجاوب */
-       @media (max-width: 768px) {
-           .container {
-               padding: 1.5rem;
-           }
-
-           .title {
-               font-size: 1.8rem;
-           }
-
-           input, select, textarea {
-               padding: 0.8rem;
-           }
-       }
-
-       @media (max-width: 480px) {
-           body {
-               padding: 10px;
-           }
-
-           .container {
-               padding: 1rem;
-           }
-
-           .title {
-               font-size: 1.6rem;
-           }
-       }
-
-       /* تأثيرات إضافية */
-       .form-group {
-           position: relative;
-       }
-
-           .form-group i {
-               position: absolute;
-               left: 15px;
-               top: 50%;
-               transform: translateY(-50%);
-               color: #718096;
-           }
-   </style>
+        .probability {
+            font-weight: bold;
+            color: #38a169;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>التشخيص الطبي الذكي</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h2 class="title">التشخيص الطبي الذكي</h2>
-        <form action="/analyze_symptoms" method="post" class="form">
+        <form id="diagnosis_form" class="form">
             <label for="age">العمر:</label>
             <input type="number" id="age" name="age" required>
 
@@ -180,22 +122,57 @@
                 <option value="female">أنثى</option>
             </select>
 
-            <label for="symptoms">الأعراض:</label>
-            <textarea id="symptoms" name="symptoms" placeholder="قم بكتابة الأعراض التي تعاني منها بالتفصيل" required></textarea>
+            <label for="symptoms">الأعراض (افصل بينها بفاصلة):</label>
+            <input type="text" id="symptoms" placeholder="مثال: حمى, سعال, إرهاق" required>
 
-            <label for="medical_history">التاريخ الطبي:</label>
-            <textarea id="medical_history" name="medical_history" placeholder="اذكر أي أمراض سابقة أو مزمنة إن وجدت"></textarea>
+            <button type="button" id="diagnose_button" class="submit-btn">تحليل الأعراض</button>
 
-            <label for="medications">الأدوية الحالية:</label>
-            <textarea id="medications" name="medications" placeholder="اذكر الأدوية التي تتناولها حاليًا"></textarea>
-
-            <label for="allergies">الحساسية:</label>
-            <textarea id="allergies" name="allergies" placeholder="اذكر أي أنواع من الحساسية لديك إن وجدت"></textarea>
-
-            <button type="submit" class="submit-btn">تحليل الأعراض</button>
+            <div id="diagnosis_result">
+                <strong>🔍 نتيجة التشخيص:</strong>
+                <div id="result_text"></div>
+            </div>
         </form>
     </div>
-    <script src="script.js"></script>
 
+    <script>
+        document.getElementById("diagnose_button").addEventListener("click", function () {
+            let age = document.getElementById("age").value.trim();
+            let gender = document.getElementById("gender").value;
+            let symptoms = document.getElementById("symptoms").value.trim();
+
+            if (!age || !symptoms) {
+                alert("❌ يرجى إدخال العمر والأعراض!");
+                return;
+            }
+
+            fetch("http://127.0.0.1:5000/diagnosis", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ age: age, gender: gender, symptoms: symptoms.split(",").map(s => s.trim()) })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let resultDiv = document.getElementById("diagnosis_result");
+                    let resultText = document.getElementById("result_text");
+
+                    if (data.error) {
+                        resultText.innerHTML = `<span style="color: red;">❌ ${data.error}</span>`;
+                    } else {
+                        // إضافة قائمة بالأمراض
+                        let diseases = data.result.map(item => {
+                            return `<div class="disease">
+                                                <span>${item.disease}</span>
+                                                <span class="probability">${item.probability}</span>
+                                            </div>`;
+                        }).join('');
+
+                        resultText.innerHTML = diseases;
+                    }
+
+                    resultDiv.style.display = "block";
+                })
+                .catch(error => console.error("❌ خطأ في الاتصال:", error));
+        });
+    </script>
 </body>
 </html>

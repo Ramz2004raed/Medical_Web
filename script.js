@@ -1,5 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    console.log("JavaScript متصل بنجاح!");
+    console.log("✅ JavaScript متصل بنجاح!");
 
     /*******************************
      * 🏥 1. صفحة رفع الصور الطبية *
@@ -9,11 +9,7 @@
 
     if (imageTypeSelect) {
         imageTypeSelect.addEventListener("change", function () {
-            if (imageTypeSelect.value) {
-                imageUrlInput.style.border = "2px solid green";
-            } else {
-                imageUrlInput.style.border = "2px solid red";
-            }
+            imageUrlInput.style.border = imageTypeSelect.value ? "2px solid green" : "2px solid red";
         });
     }
 
@@ -21,17 +17,48 @@
      * 🔍 2. صفحة التشخيص الطبي *
      ********************************/
     let symptomsInput = document.getElementById("symptoms");
-    let diagnosisForm = document.getElementById("diagnosis_form");
+    let ageInput = document.getElementById("age"); // إضافة حقل العمر
+    let diagnoseButton = document.getElementById("diagnose_button");
+    let resultText = document.getElementById("result_text");
 
-    if (diagnosisForm) {
-        diagnosisForm.addEventListener("submit", function (event) {
-            if (!symptomsInput.value.trim()) {
-                event.preventDefault();
-                alert("يرجى إدخال الأعراض لتحليل التشخيص!");
+    if (diagnoseButton) {
+        diagnoseButton.addEventListener("click", function () {
+            let symptoms = symptomsInput.value.trim();
+            let age = ageInput.value.trim(); // الحصول على قيمة العمر
+            if (!symptoms || !age) {
+                alert("❌ يرجى إدخال العمر والأعراض!");
                 symptomsInput.style.border = "2px solid red";
-            } else {
-                symptomsInput.style.border = "2px solid green";
+                ageInput.style.border = "2px solid red";
+                return;
             }
+
+            symptomsInput.style.border = "2px solid green";
+            ageInput.style.border = "2px solid green"; // تلوين حقل العمر باللون الأخضر
+
+            // عرض رسالة انتظار
+            resultText.innerHTML = `<span>جاري تحليل الأعراض...</span>`;
+
+            // إرسال العمر والأعراض إلى الخادم
+            fetch("http://127.0.0.1:5000/diagnosis", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    age: age,
+                    symptoms: symptoms.split(",").map(s => s.trim())
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        resultText.innerHTML = `<span style="color: red;">❌ ${data.error}</span>`;
+                    } else {
+                        resultText.innerHTML = `<span style="color: green;">✅ ${data.message}</span>`;
+                    }
+                })
+                .catch(error => {
+                    resultText.innerHTML = `<span style="color: red;">❌ خطأ في الاتصال بالخادم!</span>`;
+                    console.error("❌ خطأ في الاتصال:", error);
+                });
         });
     }
 
@@ -43,11 +70,7 @@
 
     if (testTypeSelect) {
         testTypeSelect.addEventListener("change", function () {
-            if (testTypeSelect.value) {
-                testDetailsDiv.style.display = "block";
-            } else {
-                testDetailsDiv.style.display = "none";
-            }
+            testDetailsDiv.style.display = testTypeSelect.value ? "block" : "none";
         });
     }
 
@@ -60,68 +83,25 @@
 
     if (queryTypeSelect) {
         queryTypeSelect.addEventListener("change", function () {
-            if (queryTypeSelect.value === "info") {
-                generalQueryDiv.style.display = "block";
-                detailedQueryDiv.style.display = "none";
-            } else if (queryTypeSelect.value === "take") {
-                generalQueryDiv.style.display = "none";
-                detailedQueryDiv.style.display = "block";
-            } else {
-                generalQueryDiv.style.display = "none";
-                detailedQueryDiv.style.display = "none";
-            }
+            generalQueryDiv.style.display = queryTypeSelect.value === "info" ? "block" : "none";
+            detailedQueryDiv.style.display = queryTypeSelect.value === "take" ? "block" : "none";
         });
     }
 
-    /********************************
-     * 🏠 5. الصفحة الرئيسية *
-     ********************************/
-    let homeWelcomeMessage = document.getElementById("home_welcome");
-
-    if (homeWelcomeMessage) {
-        setTimeout(() => {
-            homeWelcomeMessage.style.opacity = "1";
-            homeWelcomeMessage.style.transform = "translateY(0)";
-        }, 500);
-    }
-
-    /************************************
-     * ✅ منع إرسال النماذج دون إدخال بيانات *
+    /************************************ 
+     * 📌 إرسال صورة طبية إلى الخادم *
      ************************************/
-    let forms = document.querySelectorAll("form");
-    forms.forEach((form) => {
-        form.addEventListener("submit", function (event) {
-            let inputs = form.querySelectorAll("input[required], select[required]");
-            let valid = true;
-
-            inputs.forEach((input) => {
-                if (!input.value.trim()) {
-                    input.style.border = "2px solid red";
-                    valid = false;
-                } else {
-                    input.style.border = "2px solid green";
-                }
-            });
-
-            if (!valid) {
-                event.preventDefault();
-                alert("يرجى ملء جميع الحقول المطلوبة!");
-            }
-        });
-    });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    let form = document.querySelector(".form");
-
-    if (form) {
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            let imageUrl = document.getElementById("image_url").value;
-            if (!imageUrl.trim()) {
+    let analyzeButton = document.getElementById("analyze_button");
+    if (analyzeButton) {
+        analyzeButton.addEventListener("click", function () {
+            let imageUrl = imageUrlInput.value.trim();
+            if (!imageUrl) {
                 alert("❌ يرجى إدخال رابط الصورة!");
                 return;
             }
+
+            // عرض رسالة انتظار
+            alert("جاري إرسال الصورة للتحليل...");
 
             fetch("http://127.0.0.1:5000/analyze_image", {
                 method: "POST",
@@ -130,9 +110,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
+                    alert(`✅ تحليل الصورة: ${data.message}`);
                 })
-                .catch(error => console.error("خطأ في الاتصال:", error));
+                .catch(error => {
+                    alert("❌ حدث خطأ أثناء تحليل الصورة.");
+                    console.error("❌ خطأ في الاتصال:", error);
+                });
         });
     }
 });

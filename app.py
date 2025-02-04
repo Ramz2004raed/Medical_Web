@@ -2,7 +2,7 @@
 from flask_cors import CORS
 import requests
 import google.generativeai as genai
-
+import os
 app = Flask(__name__)
 CORS(app)
 
@@ -68,4 +68,5 @@ def get_drug_info():
         return jsonify({"error": f"❌ خطأ في الاتصال بالخادم: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))  # تحديد البورت من البيئة أو 10000 افتراضيًا
+    app.run(host='0.0.0.0', port=port, debug=True)

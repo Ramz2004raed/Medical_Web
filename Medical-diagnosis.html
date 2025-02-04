@@ -100,9 +100,12 @@
             border-radius: 8px;
         }
 
-        .probability {
-            font-weight: bold;
-            color: #38a169;
+        .loading {
+            font-size: 1rem;
+            color: #2f855a;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
         }
     </style>
     <meta charset="UTF-8">
@@ -127,6 +130,8 @@
 
             <button type="button" id="diagnose_button" class="submit-btn">تحليل الأعراض</button>
 
+            <div class="loading" id="loading">🔄 جاري تحليل الأعراض...</div>
+
             <div id="diagnosis_result">
                 <strong>🔍 نتيجة التشخيص:</strong>
                 <div id="result_text"></div>
@@ -135,44 +140,88 @@
     </div>
 
     <script>
-        document.getElementById("diagnose_button").addEventListener("click", function () {
+        document.getElementById("diagnose_button").addEventListener("click", async function () {
             let age = document.getElementById("age").value.trim();
             let gender = document.getElementById("gender").value;
             let symptoms = document.getElementById("symptoms").value.trim();
+            let resultDiv = document.getElementById("diagnosis_result");
+            let resultText = document.getElementById("result_text");
+            let loadingDiv = document.getElementById("loading");
 
             if (!age || !symptoms) {
                 alert("❌ يرجى إدخال العمر والأعراض!");
                 return;
             }
 
-            fetch("http://127.0.0.1:5000/diagnosis", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ age: age, gender: gender, symptoms: symptoms.split(",").map(s => s.trim()) })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    let resultDiv = document.getElementById("diagnosis_result");
-                    let resultText = document.getElementById("result_text");
+            // إظهار رسالة التحميل
+            loadingDiv.style.display = "block";
+            resultDiv.style.display = "none";
 
-                    if (data.error) {
-                        resultText.innerHTML = `<span style="color: red;">❌ ${data.error}</span>`;
-                    } else {
-                        // إضافة قائمة بالأمراض
-                        let diseases = data.result.map(item => {
-                            return `<div class="disease">
-                                        <span>${item.disease}</span>
-                                        <span class="probability">${item.probability}</span>
-                                    </div>`;
-                        }).join('');
+            try {
+                // 1️⃣ إنشاء جلسة جديدة للحصول على `SessionID`
+                let sessionResponse = await fetch("https://api.endlessmedical.com/v1/dx/InitSession", {
+                    method: "GET"
+                });
+                let sessionData = await sessionResponse.json();
+                let sessionID = sessionData.SessionID;
 
-                        resultText.innerHTML = diseases;
-                    }
+                if (!sessionID) {
+                    throw new Error("❌ لم يتم الحصول على SessionID من الخادم!");
+                }
 
-                    resultDiv.style.display = "block";
-                })
-                .catch(error => console.error("❌ خطأ في الاتصال:", error));
+                // 2️⃣ إرسال الأعراض وتحليلها
+                let symptomsArray = symptoms.split(",").map(s => s.trim());
+
+                for (let symptom of symptomsArray) {
+                    await fetch(`https://api.endlessmedical.com/v1/dx/UpdateSymptoms?SessionID=${sessionID}&name=${symptom}&value=1`, {
+                        method: "GET"
+                    });
+                }
+
+                // 3️⃣ الحصول على التشخيص النهائي
+                let diagnosisResponse = await fetch(`https://api.endlessmedical.com/v1/dx/Analyze?SessionID=${sessionID}`, {
+                    method: "GET"
+                });
+
+                let diagnosisData = await diagnosisResponse.json();
+
+                loadingDiv.style.display = "none";
+                resultDiv.style.display = "block";
+
+                if (!diagnosisData.Diseases) {
+                    resultText.innerHTML = `<span style="color: red;">❌ لم يتم العثور على تشخيص</span>`;
+                    return;
+                }
+
+                let diseases = Object.entries(diagnosisData.Diseases)
+                    .sort((a, b) => b[1] - a[1]) // ترتيب الأمراض حسب الاحتمالية
+                    .slice(0, 5) // عرض أعلى 5 احتمالات فقط
+                    .map(([disease, probability]) => {
+                        return `<div class="disease">
+                            <span>${disease}</span>
+                            <span class="probability">${(probability * 100).toFixed(2)}%</span>
+                        </div>`;
+                    })
+                    .join('');
+
+                resultText.innerHTML = diseases;
+                speakResults(diseases);
+
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                resultText.innerHTML = `<span style="color: red;">❌ خطأ في الاتصال بالخادم!</span>`;
+                console.error("❌ خطأ في الاتصال:", error);
+            }
         });
+
+        // 🗣 وظيفة تحويل النص إلى صوت
+        function speakResults(text) {
+            let speech = new SpeechSynthesisUtterance(text.replace(/<\/?[^>]+(>|$)/g, ""));
+            speech.lang = "ar-SA";
+            speech.rate = 1;
+            speechSynthesis.speak(speech);
+        }
+
     </script>
 </body>
 </html>

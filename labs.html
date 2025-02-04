@@ -113,7 +113,6 @@
                 box-shadow: 0 5px 15px rgba(56, 161, 105, 0.3);
             }
 
-        /* تصميم متجاوب */
         @media (max-width: 768px) {
             .container {
                 padding: 1.5rem;
@@ -142,7 +141,6 @@
             }
         }
 
-        /* تنسيق الحقول الديناميكية */
         #test_results_container {
             display: grid;
             gap: 1rem;
@@ -156,69 +154,126 @@
                 margin-bottom: 0;
             }
     </style>
-    <script>
-        function updateTestFields() {
-            var testType = document.getElementById("test_type").value;
-            var resultsContainer = document.getElementById("test_results_container");
-            resultsContainer.innerHTML = "";
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="title">تحليل الفحوصات الطبية المخبرية</h2>
+            <form class="form">
+                <label for="age">العمر:</label>
+                <input type="number" id="age" name="age" required>
 
-            var fields = {
-                "blood": ["الهيموغلوبين (g/dL)", "خلايا الدم البيضاء (x10^9/L)", "خلايا الدم الحمراء (x10^12/L)"],
-                "diabetes": ["مستوى السكر في الدم (mg/dL)", "الهيموغلوبين السكري (%)"],
-                "thyroid": ["TSH (mIU/L)", "T3 (ng/dL)", "T4 (µg/dL)"],
-                "liver": ["إنزيم ALT (U/L)", "إنزيم AST (U/L)", "البيليروبين (mg/dL)"]
-            };
+                <label for="gender">الجنس:</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                </select>
 
-            if (fields[testType]) {
-                fields[testType].forEach(function (field) {
-                    var div = document.createElement("div");
+                <label for="test_type">نوع الفحص:</label>
+                <select id="test_type" name="test_type" required onchange="updateTestFields()">
+                    <option value="blood">تحليل الدم</option>
+                    <option value="diabetes">فحص السكري</option>
+                    <option value="thyroid">فحص الغدة الدرقية</option>
+                    <option value="liver">فحص الكبد</option>
+                    <option value="complete_blood_count">فحص الدم الشامل</option>
+                    <option value="cholesterol">فحص الكوليسترول</option>
+                </select>
 
-                    var label = document.createElement("label");
-                    label.textContent = field;
+                <div id="test_results_container"></div>
 
-                    var input = document.createElement("input");
-                    input.type = "number";
-                    input.name = field;
-                    input.required = true;
-                    input.step = "0.01";
-                    input.className = "dynamic-field";
+                <button type="button" id="analyze_lab_button" class="submit-btn">تحليل الفحوصات</button>
+            </form>
+            <div id="lab_result" style="display:none; margin-top: 2rem;">
+                <h3>نتيجة التحليل:</h3>
+                <div id="result_text"></div>
+            </div>
+        </div>
+        <script>
+            function updateTestFields() {
+                var testType = document.getElementById("test_type").value;
+                var resultsContainer = document.getElementById("test_results_container");
+                resultsContainer.innerHTML = "";
 
-                    div.appendChild(label);
-                    div.appendChild(input);
-                    resultsContainer.appendChild(div);
-                });
+                var fields = {
+                    "blood": ["الهيموغلوبين (g/dL)", "خلايا الدم البيضاء (x10^9/L)", "خلايا الدم الحمراء (x10^12/L)"],
+                    "diabetes": ["مستوى السكر في الدم (mg/dL)", "الهيموغلوبين السكري (%)"],
+                    "thyroid": ["TSH (mIU/L)", "T3 (ng/dL)", "T4 (µg/dL)"],
+                    "liver": ["إنزيم ALT (U/L)", "إنزيم AST (U/L)", "البيليروبين (mg/dL)"],
+                    "complete_blood_count": ["الهيموغلوبين (g/dL)", "خلايا الدم البيضاء (x10^9/L)", "عدد الصفائح الدموية (x10^9/L)"],
+                    "cholesterol": ["مستوى الكوليسترول الكلي (mg/dL)", "مستوى الكوليسترول LDL (mg/dL)", "مستوى الكوليسترول HDL (mg/dL)"]
+                };
+
+                if (fields[testType]) {
+                    fields[testType].forEach(function (field) {
+                        var div = document.createElement("div");
+
+                        var label = document.createElement("label");
+                        label.textContent = field;
+
+                        var input = document.createElement("input");
+                        input.type = "number";
+                        input.name = field;
+                        input.required = true;
+                        input.step = "0.01";
+                        input.className = "dynamic-field";
+
+                        div.appendChild(label);
+                        div.appendChild(input);
+                        resultsContainer.appendChild(div);
+                    });
+                }
             }
-        }
-    </script>
-</head>
-<body>
-    <div class="container">
-        <h2 class="title">تحليل الفحوصات الطبية المخبرية</h2>
-        <form action="/analyze_lab" method="post" class="form">
-            <label for="age">العمر:</label>
-            <input type="number" id="age" name="age" required>
 
-            <label for="gender">الجنس:</label>
-            <select id="gender" name="gender" required>
-                <option value="male">ذكر</option>
-                <option value="female">أنثى</option>
-            </select>
+            document.addEventListener("DOMContentLoaded", function () {
+                let analyzeLabButton = document.getElementById("analyze_lab_button");
+                if (analyzeLabButton) {
+                    analyzeLabButton.addEventListener("click", function () {
+                        let age = document.getElementById("age").value.trim();
+                        let gender = document.getElementById("gender").value;
+                        let testType = document.getElementById("test_type").value;
+                        let testResults = {};
+                        document.querySelectorAll(".dynamic-field").forEach(function (input) {
+                            testResults[input.name] = parseFloat(input.value);
+                        });
 
-            <label for="test_type">نوع الفحص:</label>
-            <select id="test_type" name="test_type" required onchange="updateTestFields()">
-                <option value="">اختر نوع الفحص</option>
-                <option value="blood">تحليل دم شامل</option>
-                <option value="diabetes">فحص السكر</option>
-                <option value="thyroid">وظائف الغدة الدرقية</option>
-                <option value="liver">وظائف الكبد</option>
-            </select>
+                        if (!age || Object.keys(testResults).length === 0) {
+                            alert("❌ يرجى إدخال العمر ونتائج الفحص!");
+                            return;
+                        }
 
-            <div id="test_results_container"></div>
+                        let resultDiv = document.getElementById("lab_result");
+                        let resultText = document.getElementById("result_text");
 
-            <button type="submit" class="submit-btn">تحليل النتائج</button>
-        </form>
-    </div>
-    <script src="script.js"></script>
+                        resultText.innerHTML = `<span>جاري تحليل الفحوصات...</span>`;
+                        resultDiv.style.display = "block";
 
-</body>
+                        // استخدام try-catch لمعالجة الأخطاء بشكل أفضل
+                        fetch("http://127.0.0.1:5000/analyze_lab", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                age: parseInt(age),
+                                gender: gender,
+                                test_type: testType,
+                                test_results: testResults
+                            })
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`خطأ في الاتصال بالخادم: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                resultText.innerHTML = data.result.join("<br>");
+                            })
+                            .catch(error => {
+                                resultText.innerHTML = `<span style="color: red;">❌ خطأ في الاتصال بالخادم!</span>`;
+                                console.error("❌ خطأ في الاتصال:", error);
+                            });
+                    });
+                }
+            });
+        </script>
+    </body>
 </html>
+

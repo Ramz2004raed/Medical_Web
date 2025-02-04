@@ -1,121 +1,51 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ JavaScript متصل بنجاح!");
 
-    /*******************************
-     * 🏥 1. صفحة رفع الصور الطبية *
-     *******************************/
-    let imageTypeSelect = document.getElementById("image_type");
-    let imageUrlInput = document.getElementById("image_url");
-
-    if (imageTypeSelect) {
-        imageTypeSelect.addEventListener("change", function () {
-            imageUrlInput.style.border = imageTypeSelect.value ? "2px solid green" : "2px solid red";
-        });
+    function speakText(text) {
+        let speech = new SpeechSynthesisUtterance();
+        speech.text = text;
+        speech.lang = "ar-SA";
+        speech.rate = 1;
+        speech.pitch = 1;
+        speech.volume = 1;
+        window.speechSynthesis.speak(speech);
     }
 
-    /********************************
-     * 🔍 2. صفحة التشخيص الطبي *
-     ********************************/
-    let symptomsInput = document.getElementById("symptoms");
-    let ageInput = document.getElementById("age"); // إضافة حقل العمر
-    let diagnoseButton = document.getElementById("diagnose_button");
-    let resultText = document.getElementById("result_text");
+    async function fetchDrugInfo() {
+        let drugName = document.getElementById("drug_name").value.trim();
+        let resultDiv = document.getElementById("drug_info");
+        let loadingText = document.getElementById("loading");
 
-    if (diagnoseButton) {
-        diagnoseButton.addEventListener("click", function () {
-            let symptoms = symptomsInput.value.trim();
-            let age = ageInput.value.trim(); // الحصول على قيمة العمر
-            if (!symptoms || !age) {
-                alert("❌ يرجى إدخال العمر والأعراض!");
-                symptomsInput.style.border = "2px solid red";
-                ageInput.style.border = "2px solid red";
+        if (!drugName) {
+            alert("❌ يرجى إدخال اسم الدواء!");
+            return;
+        }
+
+        resultDiv.innerHTML = "";
+        loadingText.style.display = "block";
+
+        try {
+            let response = await fetch(`http://127.0.0.1:5000/drug_info?name=${encodeURIComponent(drugName)}`);
+            let drugData = await response.json();
+
+            loadingText.style.display = "none";
+
+            if (drugData.error) {
+                resultDiv.innerHTML = `<p style="color: red;">❌ ${drugData.error}</p>`;
+                speakText(`❌ ${drugData.error}`);
                 return;
             }
 
-            symptomsInput.style.border = "2px solid green";
-            ageInput.style.border = "2px solid green"; // تلوين حقل العمر باللون الأخضر
+            resultDiv.innerHTML = `<pre>${drugData.result}</pre>`;
+            speakText(drugData.result);
 
-            // عرض رسالة انتظار
-            resultText.innerHTML = `<span>جاري تحليل الأعراض...</span>`;
-
-            // إرسال العمر والأعراض إلى الخادم
-            fetch("http://127.0.0.1:5000/diagnosis", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    age: age,
-                    symptoms: symptoms.split(",").map(s => s.trim())
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        resultText.innerHTML = `<span style="color: red;">❌ ${data.error}</span>`;
-                    } else {
-                        resultText.innerHTML = `<span style="color: green;">✅ ${data.message}</span>`;
-                    }
-                })
-                .catch(error => {
-                    resultText.innerHTML = `<span style="color: red;">❌ خطأ في الاتصال بالخادم!</span>`;
-                    console.error("❌ خطأ في الاتصال:", error);
-                });
-        });
+        } catch (error) {
+            loadingText.style.display = "none";
+            resultDiv.innerHTML = `<p style="color: red;">❌ خطأ في الاتصال بالخادم!</p>`;
+            speakText("❌ خطأ في الاتصال بالخادم");
+            console.error("❌ خطأ في الاتصال:", error);
+        }
     }
 
-    /*******************************
-     * 🧪 3. صفحة الفحوصات المخبرية *
-     *******************************/
-    let testTypeSelect = document.getElementById("test_type");
-    let testDetailsDiv = document.getElementById("test_details");
-
-    if (testTypeSelect) {
-        testTypeSelect.addEventListener("change", function () {
-            testDetailsDiv.style.display = testTypeSelect.value ? "block" : "none";
-        });
-    }
-
-    /********************************
-     * 💊 4. صفحة الأدوية *
-     ********************************/
-    let queryTypeSelect = document.getElementById("query_type");
-    let generalQueryDiv = document.getElementById("general_query");
-    let detailedQueryDiv = document.getElementById("detailed_query");
-
-    if (queryTypeSelect) {
-        queryTypeSelect.addEventListener("change", function () {
-            generalQueryDiv.style.display = queryTypeSelect.value === "info" ? "block" : "none";
-            detailedQueryDiv.style.display = queryTypeSelect.value === "take" ? "block" : "none";
-        });
-    }
-
-    /************************************ 
-     * 📌 إرسال صورة طبية إلى الخادم *
-     ************************************/
-    let analyzeButton = document.getElementById("analyze_button");
-    if (analyzeButton) {
-        analyzeButton.addEventListener("click", function () {
-            let imageUrl = imageUrlInput.value.trim();
-            if (!imageUrl) {
-                alert("❌ يرجى إدخال رابط الصورة!");
-                return;
-            }
-
-            // عرض رسالة انتظار
-            alert("جاري إرسال الصورة للتحليل...");
-
-            fetch("http://127.0.0.1:5000/analyze_image", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ image_url: imageUrl })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert(`✅ تحليل الصورة: ${data.message}`);
-                })
-                .catch(error => {
-                    alert("❌ حدث خطأ أثناء تحليل الصورة.");
-                    console.error("❌ خطأ في الاتصال:", error);
-                });
-        });
-    }
+    document.querySelector("button").addEventListener("click", fetchDrugInfo);
 });

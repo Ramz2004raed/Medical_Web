@@ -1,0 +1,12 @@
+# تجاهل مجلد .vs الخاص بـ Visual Studio
+.vs/
+
+# تجاهل مجلدات البناء والملفات الخاصة بأنظمة التشغيل
+__pycache__/
+*.pyc
+
+# تجاهل ملفات Visual Studio الأخرى
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
